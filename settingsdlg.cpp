@@ -9,6 +9,7 @@ SettingsDlg::SettingsDlg(QWidget *parent) :
     ui(new Ui::SettingsDlg)
 {
     ui->setupUi(this);
+    ui->feedsList->setFocus();
 
     QSettings s;
     QList<QVariant> urls = s.value("feeds").toList();

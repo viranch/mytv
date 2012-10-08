@@ -15,6 +15,7 @@ RssReader::RssReader(QObject *parent) :
 
     m_trayMenu = new QMenu();
     m_marker = m_trayMenu->addSeparator();
+    m_trayMenu->addAction("Refresh", this, SLOT(fetchFeeds()));
     m_trayMenu->addAction("Settings...", m_dlg, SLOT(show()));
     m_trayMenu->addAction("Quit", this, SIGNAL(quit()));
 
@@ -22,7 +23,6 @@ RssReader::RssReader(QObject *parent) :
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
 
-    QSettings s;
     m_refreshTimer = new QTimer(this);
     connect(m_refreshTimer, SIGNAL(timeout()), this, SLOT(fetchFeeds()));
     fetchFeeds();
@@ -62,14 +62,21 @@ void RssReader::showFeeds(QList<Feed*> data)
     qSort(dates);
     QStringList sortedTitles;
     foreach(QDateTime dt, dates) {
-        sortedTitles << titles.values(dt);
+        foreach(QString t, titles.values(dt)) {
+            sortedTitles << dt.toString("MMM d") + " - " + t;
+        }
+    }
+
+    QSettings s;
+    int count = s.value("itemCount", 10).toInt();
+    int size = sortedTitles.size();
+    if (size > count) {
+        sortedTitles = sortedTitles.mid(size-count);
     }
 
     clear();
-    QSettings s;
-    int count = s.value("itemCount", 10).toInt();
     QAction *prev = m_marker;
-    foreach(QString title, sortedTitles.mid(sortedTitles.size()-count)) {
+    foreach(QString title, sortedTitles) {
         QAction *act = new QAction(title, m_trayMenu);
         m_trayMenu->insertAction(prev, act);
         m_menuEntries << act;
