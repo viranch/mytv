@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     rssreader.cpp \
     settingsdlg.cpp \
-    rssengine.cpp
+    rssengine.cpp \
+    feed.cpp
 
 HEADERS += \
     rssreader.h \
     settingsdlg.h \
-    rssengine.h
+    rssengine.h \
+    feed.h
 
 RESOURCES += \
     resources.qrc

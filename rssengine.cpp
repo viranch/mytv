@@ -7,8 +7,6 @@
 #include <QDateTime>
 #include <QStringList>
 
-#include <QDebug>
-
 RssEngine::RssEngine(QObject *parent) :
     QObject(parent)
 {
@@ -26,18 +24,24 @@ void RssEngine::parseFeed(QNetworkReply *reply)
     QDomDocument doc;
     doc.setContent(reply->readAll());
     QDomElement root = doc.documentElement();
-    QDomElement item = root.firstChildElement("channel").firstChildElement("item");
+    QDomNodeList items = root.elementsByTagName("item");
+    QList<Feed*> feeds;
 
-    QString title = item.firstChildElement("title").text();
-    QString pubDate = item.firstChildElement("pubDate").text();
-    QStringList dateToks = pubDate.split(" ");
-    if (dateToks.size()>5) {
-        pubDate = QStringList(dateToks.mid(0, 5)).join(" ");
+    for(int i=0; i<items.size(); i++) {
+        QDomElement item = items.at(i).toElement();
+        QString title = item.firstChildElement("title").text();
+        QString pubDate = item.firstChildElement("pubDate").text();
+        QStringList dateToks = pubDate.split(" ");
+        if (dateToks.size()>5) {
+            pubDate = QStringList(dateToks.mid(0, 5)).join(" ");
+        }
+        QDateTime date = QDateTime::fromString(pubDate, "ddd, dd MMM yyyy hh:mm:ss");
+
+        Feed *data = new Feed(reply->url());
+        data->setProperty("title", title);
+        data->setProperty("date", date);
+        feeds << data;
     }
-    QDateTime date = QDateTime::fromString(pubDate, "ddd, dd MMM yyyy hh:mm:ss");
 
-    QList<QVariant> data;
-    data << title << date;
-
-    emit feedUpdated(QPair<QUrl, QVariant>(reply->url(), QVariant(data)));
+    emit feedUpdated(feeds);
 }

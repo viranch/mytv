@@ -6,6 +6,7 @@
 #include <QMenu>
 #include "settingsdlg.h"
 #include "rssengine.h"
+#include "feed.h"
 
 class RssReader : public QObject
 {
@@ -19,13 +20,17 @@ signals:
     
 public slots:
     void fetchFeeds();
+    void showFeeds(QList<Feed*> data);
+    void clear();
 
 private:
     QSystemTrayIcon *m_tray;
     QMenu *m_trayMenu;
     SettingsDlg *m_dlg;
     RssEngine *m_engine;
-    QMap<QUrl, QPair<> > m_feeds;
+    QList<Feed*> m_feeds;
+    QAction *m_marker;
+    QList<QAction*> m_menuEntries;
     
 };
 
