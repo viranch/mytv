@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network xml
 
 TARGET = rssreader
 CONFIG   += app_bundle lib_bundle
@@ -14,11 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     rssreader.cpp \
-    settingsdlg.cpp
+    settingsdlg.cpp \
+    rssengine.cpp
 
 HEADERS += \
     rssreader.h \
-    settingsdlg.h
+    settingsdlg.h \
+    rssengine.h
 
 RESOURCES += \
     resources.qrc
