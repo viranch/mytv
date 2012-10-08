@@ -13,10 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    rssreader.cpp
+    rssreader.cpp \
+    settingsdlg.cpp
 
 HEADERS += \
-    rssreader.h
+    rssreader.h \
+    settingsdlg.h
 
 RESOURCES += \
     resources.qrc
+
+FORMS += \
+    settingsdlg.ui

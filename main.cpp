@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
 
     RssReader r;
     QObject::connect(&r, SIGNAL(quit()), &a, SLOT(quit()));
+    a.setQuitOnLastWindowClosed(false);
     
     return a.exec();
 }

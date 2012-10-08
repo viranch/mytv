@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include "settingsdlg.h"
 
 class RssReader : public QObject
 {
@@ -20,6 +21,7 @@ public slots:
 private:
     QSystemTrayIcon *m_tray;
     QMenu *m_trayMenu;
+    SettingsDlg *m_dlg;
     
 };
 

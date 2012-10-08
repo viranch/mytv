@@ -1,4 +1,5 @@
 #include "rssreader.h"
+#include "settingsdlg.h"
 
 #include<QDebug>
 
@@ -9,6 +10,8 @@ RssReader::RssReader(QObject *parent) :
     QAction *settingsAction = m_trayMenu->addAction("Settings...");
     QAction *quitAction = m_trayMenu->addAction("Quit");
 
+    m_dlg = new SettingsDlg();
+    connect(settingsAction, SIGNAL(triggered()), m_dlg, SLOT(show()));
     connect(quitAction, SIGNAL(triggered()), this, SIGNAL(quit()));
 
     m_tray = new QSystemTrayIcon(QIcon(":/images/feedicon.png"), this);
@@ -19,4 +22,5 @@ RssReader::RssReader(QObject *parent) :
 RssReader::~RssReader()
 {
     delete m_trayMenu;
+    delete m_dlg;
 }
