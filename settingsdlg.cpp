@@ -15,6 +15,8 @@ SettingsDlg::SettingsDlg(QWidget *parent) :
     foreach(QVariant feed, urls) {
         ui->feedsList->addItem(feed.toUrl().toString());
     }
+    ui->interval->setValue(s.value("refreshInterval", 1).toInt());
+    ui->itemCount->setValue(s.value("itemCount", 10).toInt());
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
 }
@@ -47,6 +49,8 @@ void SettingsDlg::saveSettings()
 
     QSettings s;
     s.setValue("feeds", urls);
+    s.setValue("refreshInterval", ui->interval->value());
+    s.setValue("itemCount", ui->itemCount->value());
 
     emit settingsUpdated();
 }

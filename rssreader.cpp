@@ -22,6 +22,9 @@ RssReader::RssReader(QObject *parent) :
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
 
+    QSettings s;
+    m_refreshTimer = new QTimer(this);
+    connect(m_refreshTimer, SIGNAL(timeout()), this, SLOT(fetchFeeds()));
     fetchFeeds();
 }
 
@@ -34,6 +37,7 @@ RssReader::~RssReader()
 void RssReader::fetchFeeds()
 {
     m_feeds.clear();
+
     QSettings s;
     QList<QVariant> urlList = s.value("feeds").toList();
     foreach(QVariant value, urlList) {
@@ -42,6 +46,8 @@ void RssReader::fetchFeeds()
     if (urlList.size() == 0) {
         clear();
     }
+
+    m_refreshTimer->start(s.value("refreshInterval", 1).toInt() * 60 * 60 * 1000);
 }
 
 void RssReader::showFeeds(QList<Feed*> data)
@@ -60,8 +66,10 @@ void RssReader::showFeeds(QList<Feed*> data)
     }
 
     clear();
+    QSettings s;
+    int count = s.value("itemCount", 10).toInt();
     QAction *prev = m_marker;
-    foreach(QString title, sortedTitles) {
+    foreach(QString title, sortedTitles.mid(sortedTitles.size()-count)) {
         QAction *act = new QAction(title, m_trayMenu);
         m_trayMenu->insertAction(prev, act);
         m_menuEntries << act;

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QTimer>
 #include "settingsdlg.h"
 #include "rssengine.h"
 #include "feed.h"
@@ -27,6 +28,7 @@ private:
     QSystemTrayIcon *m_tray;
     QMenu *m_trayMenu;
     SettingsDlg *m_dlg;
+    QTimer *m_refreshTimer;
     RssEngine *m_engine;
     QList<Feed*> m_feeds;
     QAction *m_marker;
