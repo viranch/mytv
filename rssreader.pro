@@ -12,4 +12,11 @@ CONFIG   += app_bundle lib_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    rssreader.cpp
+
+HEADERS += \
+    rssreader.h
+
+RESOURCES += \
+    resources.qrc
