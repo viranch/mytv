@@ -52,6 +52,10 @@ void RssReader::fetchFeeds()
 
 void RssReader::showFeeds(QList<Feed*> data)
 {
+    if (data.isEmpty()) {
+      return;
+    }
+
     m_feeds << data;
 
     QMap<QDateTime, QString> titles;
