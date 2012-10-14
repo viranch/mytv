@@ -21,7 +21,8 @@ signals:
     
 public slots:
     void fetchFeeds();
-    void showFeeds(QList<Feed*> data);
+    void sortFeeds(QList<Feed*> data);
+    void updateFeeds(QStringList titles);
     void clear();
 
 private:
