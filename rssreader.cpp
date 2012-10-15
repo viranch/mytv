@@ -26,7 +26,7 @@ RssReader::RssReader(QObject *parent) :
     m_refreshTimer->setSingleShot(true);
     connect(m_refreshTimer, SIGNAL(timeout()), this, SLOT(fetchFeeds()));
 
-    fetchFeeds();
+    update();
 }
 
 RssReader::~RssReader()
