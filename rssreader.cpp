@@ -14,8 +14,7 @@ RssReader::RssReader(QObject *parent) :
     connect(m_dlg, SIGNAL(settingsUpdated()), this, SLOT(fetchFeeds()));
 
     m_trayMenu = new QMenu();
-    m_marker = m_trayMenu->addSeparator();
-    m_trayMenu->addAction("Refresh", this, SLOT(fetchFeeds()));
+    m_marker = m_trayMenu->addAction("Refresh", this, SLOT(fetchFeeds()));
     m_trayMenu->addAction("Settings...", m_dlg, SLOT(show()));
     m_trayMenu->addAction("Quit", this, SIGNAL(quit()));
 
@@ -84,7 +83,8 @@ void RssReader::sortFeeds(QList<Feed*> data)
 void RssReader::updateFeeds(QStringList titles)
 {
     clear();
-    QAction *prev = m_marker;
+    QAction *prev = m_trayMenu->insertSeparator(m_marker);
+    m_menuEntries << prev;
     foreach(QString title, titles) {
         QAction *act = new QAction(title, m_trayMenu);
         m_trayMenu->insertAction(prev, act);
