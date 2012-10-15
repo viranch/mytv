@@ -24,6 +24,7 @@ public slots:
     void sortFeeds(QList<Feed*> data);
     void updateFeeds(QStringList titles);
     void clear();
+    void update();
 
 private:
     QSystemTrayIcon *m_tray;
@@ -34,6 +35,8 @@ private:
     QList<Feed*> m_feeds;
     QAction *m_marker;
     QList<QAction*> m_menuEntries;
+    QList<QUrl> m_urls;
+    int m_timeout;
     
 };
 

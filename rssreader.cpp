@@ -11,7 +11,7 @@ RssReader::RssReader(QObject *parent) :
     connect(m_engine, SIGNAL(feedUpdated(QList<Feed*>)), this, SLOT(sortFeeds(QList<Feed*>)));
 
     m_dlg = new SettingsDlg();
-    connect(m_dlg, SIGNAL(settingsUpdated()), this, SLOT(fetchFeeds()));
+    connect(m_dlg, SIGNAL(settingsUpdated()), this, SLOT(update()));
 
     m_trayMenu = new QMenu();
     m_marker = m_trayMenu->addAction("Refresh", this, SLOT(fetchFeeds()));
@@ -23,7 +23,9 @@ RssReader::RssReader(QObject *parent) :
     m_tray->show();
 
     m_refreshTimer = new QTimer(this);
+    m_refreshTimer->setSingleShot(true);
     connect(m_refreshTimer, SIGNAL(timeout()), this, SLOT(fetchFeeds()));
+
     fetchFeeds();
 }
 
@@ -33,20 +35,33 @@ RssReader::~RssReader()
     delete m_dlg;
 }
 
+void RssReader::update()
+{
+    QSettings s;
+    QList<QVariant> urlList = s.value("feeds").toList();
+    m_urls.clear();
+    foreach(QVariant value, urlList) {
+        m_urls << value.toUrl();
+    }
+    m_timeout = s.value("refreshInterval", 1).toInt();
+
+    fetchFeeds();
+}
+
 void RssReader::fetchFeeds()
 {
     m_feeds.clear();
 
-    QSettings s;
-    QList<QVariant> urlList = s.value("feeds").toList();
-    foreach(QVariant value, urlList) {
-        m_engine->fetchFeed(value.toUrl());
-    }
-    if (urlList.size() == 0) {
+    if (m_urls.isEmpty()) {
         clear();
+        return;
     }
 
-    m_refreshTimer->start(s.value("refreshInterval", 1).toInt() * 60 * 60 * 1000);
+    foreach(QUrl url, m_urls) {
+        m_engine->fetchFeed(url);
+    }
+
+    m_refreshTimer->start(m_timeout * 3600000);
 }
 
 void RssReader::sortFeeds(QList<Feed*> data)
