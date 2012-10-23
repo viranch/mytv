@@ -7,10 +7,9 @@
 QT       += core gui network xml
 
 TARGET = rssreader
-CONFIG   += app_bundle lib_bundle
+CONFIG   += app_bundle
 
 TEMPLATE = app
-
 
 SOURCES += main.cpp \
     rssreader.cpp \
