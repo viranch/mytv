@@ -7,7 +7,6 @@
 QT       += core gui network xml
 
 TARGET = rssreader
-CONFIG   += app_bundle
 
 TEMPLATE = app
 
