@@ -25,6 +25,7 @@ public slots:
     void updateFeeds(QStringList titles);
     void clear();
     void update();
+    void openTorrent(QAction *entry);
 
 private:
     QSystemTrayIcon *m_tray;
