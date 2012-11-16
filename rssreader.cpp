@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QRegExp>
 #include <QDesktopServices>
+#include <QCursor>
 
 RssReader::RssReader(QObject *parent) :
     QObject(parent)
@@ -24,6 +25,7 @@ RssReader::RssReader(QObject *parent) :
     m_tray = new QSystemTrayIcon(QIcon(":/images/feedicon.png"), this);
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
+    connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMenu(QSystemTrayIcon::ActivationReason)));
 
     m_refreshTimer = new QTimer(this);
     m_refreshTimer->setSingleShot(true);
@@ -127,4 +129,11 @@ void RssReader::openTorrent(QAction *entry)
     title = rx.cap(1).replace(' ', '+');
     if (!title.isEmpty())
         QDesktopServices::openUrl(QUrl("http://torrentz.in/search?f="+title+"+720p"));
+}
+
+void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
+{
+    if (reason == QSystemTrayIcon::Trigger) {
+        m_trayMenu->popup(QCursor::pos());
+    }
 }

@@ -15,10 +15,10 @@ class RssReader : public QObject
 public:
     explicit RssReader(QObject *parent = 0);
     ~RssReader();
-    
+
 signals:
     void quit();
-    
+
 public slots:
     void fetchFeeds();
     void sortFeeds(QList<Feed*> data);
@@ -26,6 +26,7 @@ public slots:
     void clear();
     void update();
     void openTorrent(QAction *entry);
+    void showMenu(QSystemTrayIcon::ActivationReason reason);
 
 private:
     QSystemTrayIcon *m_tray;
@@ -38,7 +39,7 @@ private:
     QList<QAction*> m_menuEntries;
     QList<QUrl> m_urls;
     int m_timeout;
-    
+
 };
 
 #endif // RSSREADER_H
