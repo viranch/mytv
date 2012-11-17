@@ -25,7 +25,9 @@ RssReader::RssReader(QObject *parent) :
     m_tray = new QSystemTrayIcon(QIcon(":/images/feedicon.png"), this);
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
+#ifndef Q_WS_MAC
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMenu(QSystemTrayIcon::ActivationReason)));
+#endif
 
     m_refreshTimer = new QTimer(this);
     m_refreshTimer->setSingleShot(true);
@@ -43,11 +45,7 @@ RssReader::~RssReader()
 void RssReader::update()
 {
     QSettings s;
-    QList<QVariant> urlList = s.value("feeds").toList();
-    m_urls.clear();
-    foreach(QVariant value, urlList) {
-        m_urls << value.toUrl();
-    }
+    m_url = QUrl(s.value("feed").toString());
     m_timeout = s.value("refreshInterval", 1).toInt();
 
     fetchFeeds();
@@ -55,16 +53,12 @@ void RssReader::update()
 
 void RssReader::fetchFeeds()
 {
-    m_feeds.clear();
-
-    if (m_urls.isEmpty()) {
+    if (m_url.isEmpty()) {
         clear();
         return;
     }
 
-    foreach(QUrl url, m_urls) {
-        m_engine->fetchFeed(url);
-    }
+    m_engine->fetchFeed(m_url);
 
     m_refreshTimer->start(m_timeout * 3600000);
 }
@@ -75,6 +69,7 @@ void RssReader::sortFeeds(QList<Feed*> data)
       return;
     }
 
+    m_feeds.clear();
     m_feeds << data;
 
     QMap<QDateTime, QString> titles;

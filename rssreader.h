@@ -37,7 +37,7 @@ private:
     QList<Feed*> m_feeds;
     QAction *m_marker;
     QList<QAction*> m_menuEntries;
-    QList<QUrl> m_urls;
+    QUrl m_url;
     int m_timeout;
 
 };

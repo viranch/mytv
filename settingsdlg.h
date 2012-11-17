@@ -19,8 +19,6 @@ signals:
     void settingsUpdated();
     
 private slots:
-    void on_addButton_clicked();
-    void on_deleteButton_clicked();
     void saveSettings();
 
 private:
