@@ -1,5 +1,8 @@
 #include "rssreader.h"
 #include "settingsdlg.h"
+#include "rssengine.h"
+#include "feed.h"
+#include "searchengine.h"
 
 #include <QSettings>
 #include <QDateTime>
@@ -10,8 +13,8 @@
 RssReader::RssReader(QObject *parent) :
     QObject(parent)
 {
-    m_engine = new RssEngine(this);
-    connect(m_engine, SIGNAL(feedUpdated(QList<Feed*>)), this, SLOT(sortFeeds(QList<Feed*>)));
+    m_rssEngine = new RssEngine(this);
+    connect(m_rssEngine, SIGNAL(feedUpdated(QList<Feed*>)), this, SLOT(sortFeeds(QList<Feed*>)));
 
     m_dlg = new SettingsDlg();
     connect(m_dlg, SIGNAL(settingsUpdated()), this, SLOT(update()));
@@ -58,7 +61,7 @@ void RssReader::fetchFeeds()
         return;
     }
 
-    m_engine->fetchFeed(m_url);
+    m_rssEngine->fetchFeed(m_url);
 
     m_refreshTimer->start(m_timeout * 3600000);
 }

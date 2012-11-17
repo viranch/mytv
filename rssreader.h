@@ -5,9 +5,12 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTimer>
-#include "settingsdlg.h"
-#include "rssengine.h"
-#include "feed.h"
+#include <QUrl>
+
+class SettingsDlg;
+class RssEngine;
+class Feed;
+class SearchEngine;
 
 class RssReader : public QObject
 {
@@ -33,12 +36,13 @@ private:
     QMenu *m_trayMenu;
     SettingsDlg *m_dlg;
     QTimer *m_refreshTimer;
-    RssEngine *m_engine;
+    RssEngine *m_rssEngine;
     QList<Feed*> m_feeds;
     QAction *m_marker;
     QList<QAction*> m_menuEntries;
     QUrl m_url;
     int m_timeout;
+    SearchEngine *m_searchEngine;
 
 };
 
