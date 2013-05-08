@@ -8,6 +8,8 @@
 #include <QRegExp>
 #include <QDesktopServices>
 #include <QCursor>
+#include <QApplication>
+#include <QClipboard>
 
 RssReader::RssReader(QObject *parent) :
     QObject(parent)
@@ -154,13 +156,13 @@ void RssReader::clear()
 
 void RssReader::openTorrent(QAction *entry)
 {
-    QUrl url;
-    QVariant data = entry->data();
-    if (data.type() == QVariant::String)
-        url = QUrl(data.toString());
-    else
-        url = data.toUrl();
-    QDesktopServices::openUrl(url);
+    QString link = entry->data().toString();
+    QRegExp rx("http://torrentz.in/(.*)$");
+    rx.indexIn(link);
+    QString hash = rx.cap(1).toUpper();
+    QString filename = entry->text().replace(' ','.').toLower();
+    QString torrent = "http://torcache.net/torrent/"+hash+".torrent?title="+filename;
+    QApplication::clipboard()->setText(torrent);
 }
 
 void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
