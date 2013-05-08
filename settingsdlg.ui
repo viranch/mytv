@@ -80,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>feedUrl</tabstop>
+  <tabstop>interval</tabstop>
+  <tabstop>itemCount</tabstop>
+  <tabstop>searchSuffix</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
