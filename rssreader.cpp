@@ -165,6 +165,7 @@ void RssReader::openTorrent(QAction *entry)
     QString filename = entry->text().replace(' ','.').toLower();
     QString torrent = "http://torcache.net/torrent/"+hash+".torrent?title="+filename;
     QApplication::clipboard()->setText(torrent);
+    m_tray->showMessage("Copied", "The link for .torrent file copied to clipboard");
 }
 
 void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
