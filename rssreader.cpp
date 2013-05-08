@@ -72,9 +72,11 @@ void RssReader::processFeeds(QUrl feedUrl, QList<Feed*> data)
     if (feedUrl == m_url) {
         sortFeeds(data);
     } else {
+        QSettings s;
+        int count = s.value("itemCount", 10).toInt();
         foreach(QAction *entry, m_menuEntries) {
             if (feedUrl == entry->data().toUrl()) {
-                updateSearch(entry->menu(), data.mid(0, 10));
+                updateSearch(entry->menu(), data.mid(0, count)); // first 'count' items
                 break;
             }
         }
