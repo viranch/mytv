@@ -10,7 +10,6 @@
 class SettingsDlg;
 class RssEngine;
 class Feed;
-class SearchEngine;
 
 class RssReader : public QObject
 {
@@ -24,8 +23,10 @@ signals:
 
 public slots:
     void fetchFeeds();
+    void processFeeds(QUrl feedUrl, QList<Feed*> data);
     void sortFeeds(QList<Feed*> data);
     void updateFeeds(QStringList titles);
+    void updateSearch(QMenu *entry, QList<Feed*> data);
     void clear();
     void update();
     void openTorrent(QAction *entry);
@@ -42,7 +43,6 @@ private:
     QList<QAction*> m_menuEntries;
     QUrl m_url;
     int m_timeout;
-    SearchEngine *m_searchEngine;
 
 };
 

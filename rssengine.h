@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QUrl>
 #include <QVariant>
-#include "feed.h"
+
+class Feed;
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -17,7 +18,7 @@ public:
     void fetchFeed(QUrl feed);
     
 signals:
-    void feedUpdated(QList<Feed*> data);
+    void feedUpdated(QUrl url, QList<Feed*> data);
     
 public slots:
 

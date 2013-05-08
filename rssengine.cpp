@@ -1,4 +1,5 @@
 #include "rssengine.h"
+#include "feed.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -31,6 +32,7 @@ void RssEngine::parseFeed(QNetworkReply *reply)
         QDomElement item = items.at(i).toElement();
         QString title = item.firstChildElement("title").text();
         QString pubDate = item.firstChildElement("pubDate").text();
+        QString link = item.firstChildElement("link").text();
         QStringList dateToks = pubDate.split(" ");
         if (dateToks.size()>5) {
             pubDate = QStringList(dateToks.mid(0, 5)).join(" ");
@@ -40,8 +42,9 @@ void RssEngine::parseFeed(QNetworkReply *reply)
         Feed *data = new Feed(reply->url());
         data->setProperty("title", title);
         data->setProperty("date", date);
+        data->setProperty("link", link);
         feeds << data;
     }
 
-    emit feedUpdated(feeds);
+    emit feedUpdated(reply->request().url(), feeds);
 }

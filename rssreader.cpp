@@ -2,7 +2,6 @@
 #include "settingsdlg.h"
 #include "rssengine.h"
 #include "feed.h"
-#include "searchengine.h"
 
 #include <QSettings>
 #include <QDateTime>
@@ -14,7 +13,7 @@ RssReader::RssReader(QObject *parent) :
     QObject(parent)
 {
     m_rssEngine = new RssEngine(this);
-    connect(m_rssEngine, SIGNAL(feedUpdated(QList<Feed*>)), this, SLOT(sortFeeds(QList<Feed*>)));
+    connect(m_rssEngine, SIGNAL(feedUpdated(QUrl,QList<Feed*>)), this, SLOT(processFeeds(QUrl,QList<Feed*>)));
 
     m_dlg = new SettingsDlg();
     connect(m_dlg, SIGNAL(settingsUpdated()), this, SLOT(update()));
@@ -66,6 +65,20 @@ void RssReader::fetchFeeds()
     m_refreshTimer->start(m_timeout * 3600000);
 }
 
+void RssReader::processFeeds(QUrl feedUrl, QList<Feed*> data)
+{
+    if (feedUrl == m_url) {
+        sortFeeds(data);
+    } else {
+        foreach(QAction *entry, m_menuEntries) {
+            if (feedUrl == entry->data().toUrl()) {
+                updateSearch(entry->menu(), data.mid(0, 10));
+                break;
+            }
+        }
+    }
+}
+
 void RssReader::sortFeeds(QList<Feed*> data)
 {
     if (data.isEmpty()) {
@@ -101,13 +114,33 @@ void RssReader::sortFeeds(QList<Feed*> data)
 void RssReader::updateFeeds(QStringList titles)
 {
     clear();
+    QSettings s;
     QAction *prev = m_trayMenu->insertSeparator(m_marker);
     m_menuEntries << prev;
     foreach(QString title, titles) {
-        QAction *act = new QAction(title, m_trayMenu);
-        m_trayMenu->insertAction(prev, act);
-        m_menuEntries << act;
-        prev = act;
+        QMenu *act = new QMenu(title, m_trayMenu);
+        m_trayMenu->insertMenu(prev, act);
+        m_menuEntries << act->menuAction();
+        prev = act->menuAction();
+
+        QRegExp rx(".* - (.* S\\d{2}E\\d{2}) .*");
+        rx.indexIn(title);
+        title = rx.cap(1);
+        QString suff = s.value("searchSuffix").toString();
+        if (!suff.isEmpty())
+            title += " " + suff;
+        title = title.replace(' ', '+');
+        QUrl feedUrl = QUrl("http://torrentz.in/feed?q="+title);
+        m_rssEngine->fetchFeed(feedUrl);
+        act->menuAction()->setData(feedUrl);
+    }
+}
+
+void RssReader::updateSearch(QMenu* entry, QList<Feed*> data)
+{
+    foreach(Feed* f, data) {
+        QAction *act = entry->addAction(f->property("title").toString());
+        act->setData(f->property("link").toString());
     }
 }
 
@@ -121,19 +154,13 @@ void RssReader::clear()
 
 void RssReader::openTorrent(QAction *entry)
 {
-    QString title = entry->text().split(" - ").last();
-    QRegExp rx("^(.* S\\d{2}E\\d{2}) .*");
-    rx.indexIn(title);
-    title = rx.cap(1);
-
-    if (!title.isEmpty()) {
-        QSettings s;
-        QString suff = s.value("searchSuffix").toString();
-        if (!suff.isEmpty())
-            title += " " + suff;
-        title = title.replace(" ", "+");
-        QDesktopServices::openUrl(QUrl("http://torrentz.in/search?f="+title));
-    }
+    QUrl url;
+    QVariant data = entry->data();
+    if (data.type() == QVariant::String)
+        url = QUrl(data.toString());
+    else
+        url = data.toUrl();
+    QDesktopServices::openUrl(url);
 }
 
 void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)

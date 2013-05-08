@@ -14,15 +14,13 @@ SOURCES += main.cpp \
     rssreader.cpp \
     settingsdlg.cpp \
     rssengine.cpp \
-    feed.cpp \
-    searchengine.cpp
+    feed.cpp
 
 HEADERS += \
     rssreader.h \
     settingsdlg.h \
     rssengine.h \
-    feed.h \
-    searchengine.h
+    feed.h
 
 RESOURCES += \
     resources.qrc
