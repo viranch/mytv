@@ -124,9 +124,16 @@ void RssReader::openTorrent(QAction *entry)
     QString title = entry->text().split(" - ").last();
     QRegExp rx("^(.* S\\d{2}E\\d{2}) .*");
     rx.indexIn(title);
-    title = rx.cap(1).replace(' ', '+');
-    if (!title.isEmpty())
-        QDesktopServices::openUrl(QUrl("http://torrentz.in/search?f="+title+"+720p"));
+    title = rx.cap(1);
+
+    if (!title.isEmpty()) {
+        QSettings s;
+        QString suff = s.value("searchSuffix").toString();
+        if (!suff.isEmpty())
+            title += " " + suff;
+        title = title.replace(" ", "+");
+        QDesktopServices::openUrl(QUrl("http://torrentz.in/search?f="+title));
+    }
 }
 
 void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)

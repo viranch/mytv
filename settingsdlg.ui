@@ -7,14 +7,38 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>156</height>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Items to show</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Refresh interval</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Search string suffix</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="searchSuffix"/>
+   </item>
+   <item row="2" column="1">
     <widget class="QSpinBox" name="itemCount">
      <property name="minimum">
       <number>1</number>
@@ -24,14 +48,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Items to show</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
+   <item row="1" column="1">
     <widget class="QSpinBox" name="interval">
      <property name="suffix">
       <string> hours</string>
@@ -44,27 +61,20 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Refresh interval</string>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLineEdit" name="feedUrl">
+     <property name="placeholderText">
+      <string>Set feed URL here</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3">
+   <item row="4" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="QLineEdit" name="feedUrl">
-     <property name="placeholderText">
-      <string>Set feed URL here</string>
      </property>
     </widget>
    </item>
