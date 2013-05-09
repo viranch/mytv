@@ -135,9 +135,14 @@ void RssReader::updateFeeds(QStringList titles)
         title = rx.cap(1);
         if (!suff.isEmpty()) title += " " + suff;
         title.replace(' ', '+');
+
         QUrl feedUrl = QUrl("http://torrentz.in/feed?q="+title);
         m_rssEngine->fetchFeed(feedUrl);
         act->menuAction()->setData(feedUrl);
+
+        QAction *openAct = act->addAction("Open in browser...");
+        openAct->setData(QUrl("http://torrentz.in/search?q="+title));
+        act->addSeparator();
     }
 }
 
@@ -160,16 +165,21 @@ void RssReader::clear()
 
 void RssReader::openTorrent(QAction *entry)
 {
-    QString link = entry->data().toString();
-    if (link.isEmpty())
-        return;
-    QRegExp rx("http://torrentz.in/(.*)$");
-    rx.indexIn(link);
-    QString hash = rx.cap(1).toUpper();
-    QString filename = entry->text().replace(' ','.').toLower();
-    QString torrent = "http://torcache.net/torrent/"+hash+".torrent?title="+filename;
-    QApplication::clipboard()->setText(torrent);
-    m_tray->showMessage("Copied", "The link for .torrent file copied to clipboard");
+    QVariant data = entry->data();
+    if (data.type() == QVariant::Url) {
+        QDesktopServices::openUrl(data.toUrl());
+    } else {
+        QString link = entry->data().toString();
+        if (link.isEmpty())
+            return;
+        QRegExp rx("http://torrentz.in/(.*)$");
+        rx.indexIn(link);
+        QString hash = rx.cap(1).toUpper();
+        QString filename = entry->text().replace(' ','.').toLower();
+        QString torrent = "http://torcache.net/torrent/"+hash+".torrent?title="+filename;
+        QApplication::clipboard()->setText(torrent);
+        m_tray->showMessage("Copied", "The link for .torrent file copied to clipboard");
+    }
 }
 
 void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
