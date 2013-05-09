@@ -133,7 +133,7 @@ void RssReader::updateFeeds(QStringList titles)
         QString suff = s.value("searchSuffix").toString();
         if (!suff.isEmpty())
             title += " " + suff;
-        title = title.replace(' ', '+');
+        title.replace(' ', '+');
         QUrl feedUrl = QUrl("http://torrentz.in/feed?q="+title);
         m_rssEngine->fetchFeed(feedUrl);
         act->menuAction()->setData(feedUrl);
