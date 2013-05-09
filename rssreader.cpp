@@ -118,7 +118,10 @@ void RssReader::sortFeeds(QList<Feed*> data)
 void RssReader::updateFeeds(QStringList titles)
 {
     clear();
+
     QSettings s;
+    QString suff = s.value("searchSuffix").toString();
+
     QAction *prev = m_trayMenu->insertSeparator(m_marker);
     m_menuEntries << prev;
     foreach(QString title, titles) {
@@ -130,9 +133,7 @@ void RssReader::updateFeeds(QStringList titles)
         QRegExp rx(".* - (.* S\\d{2}E\\d{2}) .*");
         rx.indexIn(title);
         title = rx.cap(1);
-        QString suff = s.value("searchSuffix").toString();
-        if (!suff.isEmpty())
-            title += " " + suff;
+        if (!suff.isEmpty()) title += " " + suff;
         title.replace(' ', '+');
         QUrl feedUrl = QUrl("http://torrentz.in/feed?q="+title);
         m_rssEngine->fetchFeed(feedUrl);
