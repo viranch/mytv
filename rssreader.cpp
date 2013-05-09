@@ -160,6 +160,8 @@ void RssReader::clear()
 void RssReader::openTorrent(QAction *entry)
 {
     QString link = entry->data().toString();
+    if (link.isEmpty())
+        return;
     QRegExp rx("http://torrentz.in/(.*)$");
     rx.indexIn(link);
     QString hash = rx.cap(1).toUpper();
