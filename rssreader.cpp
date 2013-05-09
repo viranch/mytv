@@ -152,6 +152,8 @@ void RssReader::clear()
 {
     foreach(QAction *entry, m_menuEntries) {
         m_trayMenu->removeAction(entry);
+        delete entry->menu();
+        delete entry;
     }
     m_menuEntries.clear();
 }
