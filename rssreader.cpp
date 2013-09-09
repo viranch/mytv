@@ -211,7 +211,7 @@ void RssReader::torrentAdded(QString result, QString name)
     } else {
         if (!QSystemTrayIcon::supportsMessages())
             QMessageBox::critical(0, "Transmission", "Error: "+result);
-        m_tray->showMessage("Error", result);
+        m_tray->showMessage("Error", result, QSystemTrayIcon::Critical);
     }
 }
 
