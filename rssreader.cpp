@@ -188,7 +188,7 @@ void RssReader::openTorrent(QAction *entry)
         QString link = data[0].toString();
         TrBackend backend = data[1].value<TrBackend>();
         m_transmission->addTorrent(link, backend);
-    } else {
+    } else if (data.type() == QVariant::String) {
         QString link = entry->data().toString();
         QApplication::clipboard()->setText(link);
         m_tray->showMessage("Copied", "The link for .torrent file copied to clipboard");
