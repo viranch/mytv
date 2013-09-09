@@ -17,7 +17,6 @@ SettingsDlg::SettingsDlg(QWidget *parent) :
     ui->feedUrl->setText(s.value("feed").toString());
     ui->interval->setValue(s.value("refreshInterval", 1).toInt());
     ui->itemCount->setValue(s.value("itemCount", 10).toInt());
-    ui->searchSuffix->setText(s.value("searchSuffix").toString());
     foreach (TrBackend backend, backends()) {
         ui->listWidget->addItem(backend["host"].toString());
     }
@@ -36,7 +35,6 @@ void SettingsDlg::saveSettings()
     s.setValue("feed", ui->feedUrl->text());
     s.setValue("refreshInterval", ui->interval->value());
     s.setValue("itemCount", ui->itemCount->value());
-    s.setValue("searchSuffix", ui->searchSuffix->text());
 
     emit settingsUpdated();
 }
