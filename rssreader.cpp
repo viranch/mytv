@@ -32,7 +32,7 @@ RssReader::RssReader(QObject *parent) :
     m_tray = new QSystemTrayIcon(QIcon(":/images/feedicon.png"), this);
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMenu(QSystemTrayIcon::ActivationReason)));
 #endif
 
