@@ -6,10 +6,12 @@
 #include <QMenu>
 #include <QTimer>
 #include <QUrl>
+#include <QNetworkReply>
 
 class SettingsDlg;
 class RssEngine;
 class Feed;
+class Transmission;
 
 class RssReader : public QObject
 {
@@ -31,6 +33,8 @@ public slots:
     void update();
     void openTorrent(QAction *entry);
     void showMenu(QSystemTrayIcon::ActivationReason reason);
+    void torrentAdded(QString result, QString name);
+    void handleError(QNetworkReply::NetworkError e);
 
 private:
     QSystemTrayIcon *m_tray;
@@ -43,6 +47,7 @@ private:
     QList<QAction*> m_menuEntries;
     QUrl m_url;
     int m_timeout;
+    Transmission *m_transmission;
 
 };
 

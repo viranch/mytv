@@ -2,6 +2,8 @@
 #include "settingsdlg.h"
 #include "rssengine.h"
 #include "feed.h"
+#include "trbackend.h"
+#include "transmission.h"
 
 #include <QSettings>
 #include <QDateTime>
@@ -10,6 +12,7 @@
 #include <QCursor>
 #include <QApplication>
 #include <QClipboard>
+#include <QMessageBox>
 
 RssReader::RssReader(QObject *parent) :
     QObject(parent)
@@ -36,6 +39,9 @@ RssReader::RssReader(QObject *parent) :
     m_refreshTimer = new QTimer(this);
     m_refreshTimer->setSingleShot(true);
     connect(m_refreshTimer, SIGNAL(timeout()), this, SLOT(fetchFeeds()));
+
+    m_transmission = new Transmission(this);
+    connect(m_transmission, SIGNAL(finished(QString,QString)), this, SLOT(torrentAdded(QString,QString)));
 
     update();
 }
@@ -148,9 +154,23 @@ void RssReader::updateFeeds(QStringList titles)
 
 void RssReader::updateSearch(QMenu* entry, QList<Feed*> data)
 {
+    QList<TrBackend> backends = m_dlg->backends();
     foreach(Feed* f, data) {
-        QAction *act = entry->addAction(f->property("title").toString());
-        act->setData(f->property("link").toString());
+        if (backends.size() == 0) {
+            QAction *copyAct = entry->addAction(f->property("title").toString());
+            copyAct->setData(f->property("torcacheUrl"));
+        } else {
+            QMenu *menu = entry->addMenu(f->property("title").toString());
+            QVariant link = f->property("torcacheUrl");
+            QAction *copyAct = menu->addAction("Copy .torrent link");
+            copyAct->setData(link);
+            foreach(TrBackend b, backends) {
+                QAction *act = menu->addAction("Add to " + b["host"].toString());
+                QList<QVariant> data;
+                data << link << QVariant::fromValue(b);
+                act->setData(data);
+            }
+        }
     }
 }
 
@@ -168,16 +188,14 @@ void RssReader::openTorrent(QAction *entry)
     QVariant data = entry->data();
     if (data.type() == QVariant::Url) {
         QDesktopServices::openUrl(data.toUrl());
+    } else if (data.type() == QVariant::List) {
+        QList<QVariant> data = entry->data().toList();
+        QString link = data[0].toString();
+        TrBackend backend = data[1].value<TrBackend>();
+        m_transmission->addTorrent(link, backend);
     } else {
         QString link = entry->data().toString();
-        if (link.isEmpty())
-            return;
-        QRegExp rx("http://torrentz.in/(.*)$");
-        rx.indexIn(link);
-        QString hash = rx.cap(1).toUpper();
-        QString filename = entry->text().replace(' ','.').toLower();
-        QString torrent = "http://torcache.net/torrent/"+hash+".torrent?title="+filename;
-        QApplication::clipboard()->setText(torrent);
+        QApplication::clipboard()->setText(link);
         m_tray->showMessage("Copied", "The link for .torrent file copied to clipboard");
     }
 }
@@ -187,4 +205,36 @@ void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
     if (reason == QSystemTrayIcon::Trigger) {
         m_trayMenu->popup(QCursor::pos());
     }
+}
+
+void RssReader::torrentAdded(QString result, QString name)
+{
+    if (result == "success") {
+        QMessageBox::information(0, "Transmission", name+" added for download");
+    } else {
+        QMessageBox::critical(0, "Transmission", "Error: "+result);
+    }
+}
+
+void RssReader::handleError(QNetworkReply::NetworkError error)
+{
+    QString message;
+    switch (error) {
+    case QNetworkReply::ConnectionRefusedError:
+        message = "Connection refused"; break;
+    case QNetworkReply::RemoteHostClosedError:
+    case QNetworkReply::TemporaryNetworkFailureError:
+        message = "Connection dropped"; break;
+    case QNetworkReply::HostNotFoundError:
+        message = "Could not resolve hostname"; break;
+    case QNetworkReply::TimeoutError:
+        message = "Connection timed out"; break;
+    case QNetworkReply::ContentNotFoundError:
+        message = "Content not found"; break;
+    case QNetworkReply::UnknownNetworkError:
+    case QNetworkReply::UnknownContentError:
+    default:
+        message = "Unknown error"; break;
+    }
+    QMessageBox::critical(0, "Error", message);
 }

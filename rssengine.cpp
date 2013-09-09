@@ -31,6 +31,7 @@ void RssEngine::parseFeed(QNetworkReply *reply)
     for(int i=0; i<items.size(); i++) {
         QDomElement item = items.at(i).toElement();
         QString title = item.firstChildElement("title").text();
+        QString desc = item.firstChildElement("description").text();
         QString pubDate = item.firstChildElement("pubDate").text();
         QString link = item.firstChildElement("link").text();
         QStringList dateToks = pubDate.split(" ");
@@ -43,6 +44,16 @@ void RssEngine::parseFeed(QNetworkReply *reply)
         data->setProperty("title", title);
         data->setProperty("date", date);
         data->setProperty("link", link);
+
+        QRegExp rx("Size: (.*) Seeds: (.*) Peers: (.*) Hash: (.*)");
+        rx.indexIn(desc);
+        data->setProperty("size", rx.cap(1));
+        data->setProperty("seeds", rx.cap(2));
+        data->setProperty("peers", rx.cap(3));
+        QString hash = rx.cap(4);
+        data->setProperty("hash", hash);
+        data->setProperty("torcacheUrl", "http://torcache.net/torrent/"+hash.toUpper()+".torrent");
+
         feeds << data;
     }
 

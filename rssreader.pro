@@ -16,16 +16,22 @@ SOURCES += main.cpp \
     rssreader.cpp \
     settingsdlg.cpp \
     rssengine.cpp \
-    feed.cpp
+    feed.cpp \
+    transmission.cpp \
+    trdialog.cpp
 
 HEADERS += \
     rssreader.h \
     settingsdlg.h \
     rssengine.h \
-    feed.h
+    feed.h \
+    transmission.h \
+    trbackend.h \
+    trdialog.h
 
 RESOURCES += \
     resources.qrc
 
 FORMS += \
-    settingsdlg.ui
+    settingsdlg.ui \
+    trdialog.ui
