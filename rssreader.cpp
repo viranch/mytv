@@ -205,12 +205,14 @@ void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
 void RssReader::torrentAdded(QString result, QString name)
 {
     if (result == "success") {
-        if (!QSystemTrayIcon::supportsMessages())
-            QMessageBox::information(0, "Transmission", name+" added for download");
+#ifdef Q_OS_MAC
+        QMessageBox::information(0, "Transmission", name+" added for download");
+#endif
         m_tray->showMessage("Added", name+" added for download");
     } else {
-        if (!QSystemTrayIcon::supportsMessages())
-            QMessageBox::critical(0, "Transmission", "Error: "+result);
+#ifdef Q_OS_MAC
+        QMessageBox::critical(0, "Transmission", "Error: "+result);
+#endif
         m_tray->showMessage("Error", result, QSystemTrayIcon::Critical);
     }
 }
