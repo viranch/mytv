@@ -102,16 +102,6 @@ void SettingsDlg::on_deleteBtn_clicked()
 
     int current = ui->listWidget->currentRow();
     QList<TrBackend> trBackends = backends();
-    if (trBackends[current]["is_default"].toBool()) {
-        for (int i=0; i<trBackends.size(); i++) {
-            if (i != current) {
-                trBackends[i]["is_default"] = true;
-                QListWidgetItem *item = ui->listWidget->item(i);
-                item->setText(item->text()+" (Default)");
-                break;
-            }
-        }
-    }
     trBackends.takeAt(current);
     setBackends(trBackends);
     ui->listWidget->takeItem(current);
