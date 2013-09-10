@@ -24,12 +24,10 @@ signals:
     void settingsUpdated();
     
 private slots:
+    void reload();
     void saveSettings();
-
     void on_addbtn_clicked();
-
     void on_editBtn_clicked();
-
     void on_deleteBtn_clicked();
 
 private:

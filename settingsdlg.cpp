@@ -13,20 +13,27 @@ SettingsDlg::SettingsDlg(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSettings s;
-    ui->feedUrl->setText(s.value("feed").toString());
-    ui->interval->setValue(s.value("refreshInterval", 1).toInt());
-    ui->itemCount->setValue(s.value("itemCount", 10).toInt());
-    foreach (TrBackend backend, backends()) {
-        ui->listWidget->addItem(backend["host"].toString());
-    }
-
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reload()));
+
+    reload();
 }
 
 SettingsDlg::~SettingsDlg()
 {
     delete ui;
+}
+
+void SettingsDlg::reload()
+{
+    QSettings s;
+    ui->feedUrl->setText(s.value("feed").toString());
+    ui->interval->setValue(s.value("refreshInterval", 1).toInt());
+    ui->itemCount->setValue(s.value("itemCount", 10).toInt());
+    ui->listWidget->clear();
+    foreach (TrBackend backend, backends()) {
+        ui->listWidget->addItem(backend["host"].toString());
+    }
 }
 
 void SettingsDlg::saveSettings()
@@ -57,6 +64,7 @@ void SettingsDlg::setBackends(QList<TrBackend> backends)
         variant << QVariant::fromValue(b);
     }
     s.setValue("backends", variant);
+    reload();
 }
 
 void SettingsDlg::on_addbtn_clicked()
@@ -70,8 +78,6 @@ void SettingsDlg::on_addbtn_clicked()
     trBackends << backend;
 
     setBackends(trBackends);
-
-    ui->listWidget->addItem(backend["host"].toString());
 }
 
 void SettingsDlg::on_editBtn_clicked()
@@ -104,5 +110,4 @@ void SettingsDlg::on_deleteBtn_clicked()
     QList<TrBackend> trBackends = backends();
     trBackends.takeAt(current);
     setBackends(trBackends);
-    ui->listWidget->takeItem(current);
 }
