@@ -33,3 +33,5 @@ RESOURCES += \
 FORMS += \
     settingsdlg.ui \
     trdialog.ui
+
+QMAKE_INFO_PLIST = Info.plist
