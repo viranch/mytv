@@ -29,7 +29,7 @@ MyTv::MyTv(QObject *parent) :
     m_trayMenu->addAction("Quit", this, SIGNAL(quit()));
     connect(m_trayMenu, SIGNAL(triggered(QAction*)), this, SLOT(openTorrent(QAction*)));
 
-    m_tray = new QSystemTrayIcon(QIcon(":/images/feedicon.png"), this);
+    m_tray = new QSystemTrayIcon(QIcon(":/images/appicon.png"), this);
     m_tray->setContextMenu(m_trayMenu);
     m_tray->show();
 #ifndef Q_OS_MAC
