@@ -1,5 +1,5 @@
-#ifndef RSSREADER_H
-#define RSSREADER_H
+#ifndef MYTV_H
+#define MYTV_H
 
 #include <QObject>
 #include <QSystemTrayIcon>
@@ -13,12 +13,12 @@ class RssEngine;
 class Feed;
 class Transmission;
 
-class RssReader : public QObject
+class MyTv : public QObject
 {
     Q_OBJECT
 public:
-    explicit RssReader(QObject *parent = 0);
-    ~RssReader();
+    explicit MyTv(QObject *parent = 0);
+    ~MyTv();
 
 signals:
     void quit();
@@ -51,4 +51,4 @@ private:
 
 };
 
-#endif // RSSREADER_H
+#endif // MYTV_H

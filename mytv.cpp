@@ -1,4 +1,4 @@
-#include "rssreader.h"
+#include "mytv.h"
 #include "settingsdlg.h"
 #include "rssengine.h"
 #include "feed.h"
@@ -14,7 +14,7 @@
 #include <QClipboard>
 #include <QMessageBox>
 
-RssReader::RssReader(QObject *parent) :
+MyTv::MyTv(QObject *parent) :
     QObject(parent)
 {
     m_rssEngine = new RssEngine(this);
@@ -46,13 +46,13 @@ RssReader::RssReader(QObject *parent) :
     update();
 }
 
-RssReader::~RssReader()
+MyTv::~MyTv()
 {
     delete m_trayMenu;
     delete m_dlg;
 }
 
-void RssReader::update()
+void MyTv::update()
 {
     QSettings s;
     m_url = QUrl(s.value("feed").toString());
@@ -61,7 +61,7 @@ void RssReader::update()
     fetchFeeds();
 }
 
-void RssReader::fetchFeeds()
+void MyTv::fetchFeeds()
 {
     if (m_url.isEmpty()) {
         clear();
@@ -73,7 +73,7 @@ void RssReader::fetchFeeds()
     m_refreshTimer->start(m_timeout * 3600000);
 }
 
-void RssReader::processFeeds(QUrl feedUrl, QList<Feed*> data)
+void MyTv::processFeeds(QUrl feedUrl, QList<Feed*> data)
 {
     if (feedUrl == m_url) {
         sortFeeds(data);
@@ -89,7 +89,7 @@ void RssReader::processFeeds(QUrl feedUrl, QList<Feed*> data)
     }
 }
 
-void RssReader::sortFeeds(QList<Feed*> data)
+void MyTv::sortFeeds(QList<Feed*> data)
 {
     if (data.isEmpty()) {
       return;
@@ -121,7 +121,7 @@ void RssReader::sortFeeds(QList<Feed*> data)
     updateFeeds(sortedTitles);
 }
 
-void RssReader::updateFeeds(QStringList titles)
+void MyTv::updateFeeds(QStringList titles)
 {
     clear();
 
@@ -147,7 +147,7 @@ void RssReader::updateFeeds(QStringList titles)
     }
 }
 
-void RssReader::updateSearch(QMenu* entry, QList<Feed*> data)
+void MyTv::updateSearch(QMenu* entry, QList<Feed*> data)
 {
     QList<TrBackend> backends = m_dlg->backends();
     foreach(Feed* f, data) {
@@ -169,7 +169,7 @@ void RssReader::updateSearch(QMenu* entry, QList<Feed*> data)
     }
 }
 
-void RssReader::clear()
+void MyTv::clear()
 {
     foreach(QAction *entry, m_menuEntries) {
         m_trayMenu->removeAction(entry);
@@ -178,7 +178,7 @@ void RssReader::clear()
     m_menuEntries.clear();
 }
 
-void RssReader::openTorrent(QAction *entry)
+void MyTv::openTorrent(QAction *entry)
 {
     QVariant data = entry->data();
     if (data.type() == QVariant::Url) {
@@ -195,14 +195,14 @@ void RssReader::openTorrent(QAction *entry)
     }
 }
 
-void RssReader::showMenu(QSystemTrayIcon::ActivationReason reason)
+void MyTv::showMenu(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger) {
         m_trayMenu->popup(QCursor::pos());
     }
 }
 
-void RssReader::torrentAdded(QString result, QString name)
+void MyTv::torrentAdded(QString result, QString name)
 {
     if (result == "success") {
 #ifdef Q_OS_MAC
@@ -217,7 +217,7 @@ void RssReader::torrentAdded(QString result, QString name)
     }
 }
 
-void RssReader::handleError(QNetworkReply::NetworkError error)
+void MyTv::handleError(QNetworkReply::NetworkError error)
 {
     QString message;
     switch (error) {

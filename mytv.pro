@@ -6,12 +6,12 @@
 
 QT       += core gui widgets network xml
 
-TARGET = rssreader
+TARGET = mytv
 
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    rssreader.cpp \
+    mytv.cpp \
     settingsdlg.cpp \
     rssengine.cpp \
     feed.cpp \
@@ -19,7 +19,7 @@ SOURCES += main.cpp \
     trdialog.cpp
 
 HEADERS += \
-    rssreader.h \
+    mytv.h \
     settingsdlg.h \
     rssengine.h \
     feed.h \

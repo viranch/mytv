@@ -9,7 +9,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.rssreader</string>
+	<string>org.viranch.mytv</string>
 	<key>CFBundleExecutable</key>
 	<string>@EXECUTABLE@</string>
 	<key>LSUIElement</key>

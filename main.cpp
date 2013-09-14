@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "rssreader.h"
+#include "mytv.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("Viranch, Inc.");
     QApplication::setApplicationName("RSS Reader");
 
-    RssReader r;
+    MyTv r;
     QObject::connect(&r, SIGNAL(quit()), &a, SLOT(quit()));
     a.setQuitOnLastWindowClosed(false);
     
