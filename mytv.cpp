@@ -133,7 +133,7 @@ void MyTv::updateFeeds(QStringList titles)
         m_menuEntries << act->menuAction();
         prev = act->menuAction();
 
-        QRegExp rx(".* - (.* S\\d{2}E\\d{2}) .*");
+        QRegExp rx(".* - (.* S\\d{2}E\\d{2}).*");
         rx.indexIn(title);
         title = rx.cap(1).replace(' ', '+');
 
