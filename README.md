@@ -35,7 +35,7 @@ Optionally, install to `/usr/bin`:
     sudo cp build/mytv /usr/bin/mytv
 
 
-Use:
+Use
 ---------
 
 1. Sign up on [FollowShows](http://followshows.com/) and follow your favourite shows.
