@@ -3,21 +3,22 @@ mytv
 
 A minimal system tray context menu based TV shows updater based on user-specified RSS feed, best suited for Mac OS menubar but is cross platform. Backed by [FollowShows](http://followshows.com), [Torrentz](http://torrentz.eu) and [Torcache](http://torcache.net).
 
-Qt 5.x Dependency
+Install
 ---------
 
-This application is built using Qt 5.x, so you will need this before you can compile the source code.
+### Qt 5.x Dependency
 
-Check the Qt version with:
+This application is built using Qt 5.x, so you would need to have this before you can compile the source code.
+
+Check the version with:
 
     qmake -v
 
 Look at the version of Qt libraries, not the version of `qmake` itself. Install relevant package if you don't have the `qmake` command.
 
-Install:
----------
+### Build
 
-Download and build:
+Download and compile:
 
     git clone git://github.com/viranch/mytv.git
     cd mytv
