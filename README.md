@@ -34,7 +34,6 @@ Optionally, install to `/usr/bin`:
 
     sudo cp build/mytv /usr/bin/mytv
 
-
 Use
 ---------
 
