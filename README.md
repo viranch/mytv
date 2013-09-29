@@ -18,7 +18,7 @@ Look at the version of Qt libraries, not the version of `qmake` itself. Install 
 
 ### Build
 
-Following applies to Linux only; for MacOS build, check the [release](https://github.com/viranch/mytv/releases) section.
+Following applies to Linux only; for MacOS build, check the [releases](https://github.com/viranch/mytv/releases) section.
 
 Download and compile:
 
