@@ -135,7 +135,10 @@ void MyTv::updateFeeds(QStringList titles)
 
         QRegExp rx(".* - (.* S\\d{2}E\\d{2}).*");
         rx.indexIn(title);
-        title = rx.cap(1).replace(QRegExp("\\s*\\(.*\\)"), "").replace(' ', '+');
+        // remove contents inside brackets
+        title = rx.cap(1).replace(QRegExp("\\s*\\(.*\\)"), "");
+        // sanitize
+        title.replace(' ', '+');
 
         QUrl feedUrl = QUrl("http://torrentz.in/feed?q="+title);
         m_rssEngine->fetchFeed(feedUrl);
