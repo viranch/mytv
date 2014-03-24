@@ -137,6 +137,8 @@ void MyTv::updateFeeds(QStringList titles)
         rx.indexIn(title);
         // remove contents inside brackets
         title = rx.cap(1).replace(QRegExp("\\s*\\(.*\\)"), "");
+        // remove special characters
+        title.replace('\'', "");
         // sanitize
         title.replace(' ', '+');
 
