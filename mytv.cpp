@@ -68,6 +68,8 @@ void MyTv::fetchFeeds()
         return;
     }
 
+    m_tray->setToolTip("Refreshing feeds...");
+
     m_rssEngine->fetchFeed(m_url);
 
     m_refreshTimer->start(m_timeout * 3600000);
@@ -150,6 +152,8 @@ void MyTv::updateFeeds(QStringList titles)
         openAct->setData(QUrl("https://torrentz.in/search?q="+title));
         act->addSeparator();
     }
+
+    m_tray->setToolTip("");
 }
 
 void MyTv::updateSearch(QMenu* entry, QList<Feed*> data)
