@@ -58,4 +58,6 @@ void RssEngine::parseFeed(QNetworkReply *reply)
     }
 
     emit feedUpdated(reply->request().url(), feeds);
+
+    reply->deleteLater();
 }
