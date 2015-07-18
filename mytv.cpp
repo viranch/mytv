@@ -143,8 +143,8 @@ void MyTv::updateFeeds(QStringList titles)
         title.replace(' ', '+');
 
         QUrl feedUrl = QUrl("https://torrentz.in/feed?q="+title);
-        m_rssEngine->fetchFeed(feedUrl);
         act->menuAction()->setData(feedUrl);
+        m_rssEngine->fetchFeed(feedUrl);
 
         QAction *openAct = act->addAction("Open in browser...");
         openAct->setData(QUrl("https://torrentz.in/search?q="+title));
