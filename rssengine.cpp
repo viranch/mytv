@@ -46,13 +46,15 @@ void RssEngine::parseFeed(QNetworkReply *reply)
         data->setProperty("link", link);
 
         QRegExp rx("Size: (.*) Seeds: (.*) Peers: (.*) Hash: (.*)");
-        rx.indexIn(desc);
-        data->setProperty("size", rx.cap(1));
-        data->setProperty("seeds", rx.cap(2));
-        data->setProperty("peers", rx.cap(3));
-        QString hash = rx.cap(4);
-        data->setProperty("hash", hash);
-        data->setProperty("torcacheUrl", "http://torcache.net/torrent/"+hash.toUpper()+".torrent");
+        if (reply->url().url().contains(rx)) {
+            rx.indexIn(desc);
+            data->setProperty("size", rx.cap(1));
+            data->setProperty("seeds", rx.cap(2));
+            data->setProperty("peers", rx.cap(3));
+            QString hash = rx.cap(4);
+            data->setProperty("hash", hash);
+            data->setProperty("torcacheUrl", "http://torcache.net/torrent/"+hash.toUpper()+".torrent");
+        }
 
         feeds << data;
     }
