@@ -12,6 +12,8 @@
     <string>org.viranch.mytv</string>
     <key>CFBundleExecutable</key>
     <string>@EXECUTABLE@</string>
+    <key>CFBundleIconFile</key>
+    <string>appicon</string>
     <key>LSUIElement</key>
     <string>1</string>
 </dict>

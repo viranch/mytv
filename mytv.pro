@@ -30,6 +30,8 @@ HEADERS += \
 RESOURCES += \
     resources.qrc
 
+ICON = images/appicon.icns
+
 FORMS += \
     settingsdlg.ui \
     trdialog.ui
