@@ -130,7 +130,7 @@ void MyTv::updateFeeds(QStringList titles)
     QAction *prev = m_trayMenu->insertSeparator(m_marker);
     m_menuEntries << prev;
     foreach(QString title, titles) {
-        QMenu *act = new QMenu(title, m_trayMenu);
+        QMenu *act = new QMenu(title.replace('&', "&&"), m_trayMenu);
         m_trayMenu->insertMenu(prev, act);
         m_menuEntries << act->menuAction();
         prev = act->menuAction();
