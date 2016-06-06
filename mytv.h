@@ -46,6 +46,7 @@ private:
     QAction *m_marker;
     QList<QAction*> m_menuEntries;
     QUrl m_url;
+    QUrl m_feedBaseUrl;
     int m_timeout;
     Transmission *m_transmission;
 

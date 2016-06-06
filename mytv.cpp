@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMessageBox>
+#include <QUrlQuery>
 
 MyTv::MyTv(QObject *parent) :
     QObject(parent)
@@ -35,6 +36,8 @@ MyTv::MyTv(QObject *parent) :
 #ifndef Q_OS_MAC
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMenu(QSystemTrayIcon::ActivationReason)));
 #endif
+
+    m_feedBaseUrl = QUrl("https://torrentz.in/feed");
 
     m_refreshTimer = new QTimer(this);
     m_refreshTimer->setSingleShot(true);
@@ -141,10 +144,11 @@ void MyTv::updateFeeds(QStringList titles)
         title = rx.cap(1).replace(QRegExp("\\s*\\(.*\\)"), "");
         // remove special characters
         title.replace('\'', "");
-        // sanitize
-        title.replace(' ', '+');
 
-        QUrl feedUrl = QUrl("https://torrentz.in/feed?q="+title);
+        QUrl feedUrl(m_feedBaseUrl);
+        QUrlQuery searchQuery;
+        searchQuery.addQueryItem("q", title);
+        feedUrl.setQuery(searchQuery);
         act->menuAction()->setData(feedUrl);
         m_rssEngine->fetchFeed(feedUrl);
 
