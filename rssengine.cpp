@@ -52,7 +52,7 @@ void RssEngine::parseFeed(QNetworkReply *reply)
             data->setProperty("peers", rx.cap(3));
             QString hash = rx.cap(4);
             data->setProperty("hash", hash);
-            data->setProperty("torcacheUrl", "http://torcache.net/torrent/"+hash.toUpper()+".torrent");
+            data->setProperty("torcacheUrl", "https://torcache.net/torrent/"+hash.toUpper()+".torrent");
         }
 
         feeds << data;
