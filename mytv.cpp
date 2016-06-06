@@ -37,7 +37,7 @@ MyTv::MyTv(QObject *parent) :
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showMenu(QSystemTrayIcon::ActivationReason)));
 #endif
 
-    m_feedBaseUrl = QUrl("https://torrentz.in/feed");
+    m_feedBaseUrl = QUrl("https://torrentz.eu/feed");
 
     m_refreshTimer = new QTimer(this);
     m_refreshTimer->setSingleShot(true);
@@ -153,7 +153,7 @@ void MyTv::updateFeeds(QStringList titles)
         m_rssEngine->fetchFeed(feedUrl);
 
         QAction *openAct = act->addAction("Open in browser...");
-        openAct->setData(QUrl("https://torrentz.in/search?q="+title));
+        openAct->setData(QUrl("https://torrentz.eu/search?q="+title));
         act->addSeparator();
     }
 
