@@ -46,8 +46,7 @@ void RssEngine::parseFeed(QNetworkReply *reply)
         data->setProperty("link", link);
 
         QRegExp rx("Size: (.*) Seeds: (.*) Peers: (.*) Hash: (.*)");
-        if (reply->url().url().contains(rx)) {
-            rx.indexIn(desc);
+        if (rx.indexIn(desc) != -1) {
             data->setProperty("size", rx.cap(1));
             data->setProperty("seeds", rx.cap(2));
             data->setProperty("peers", rx.cap(3));
