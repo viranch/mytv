@@ -26,7 +26,7 @@ MyTv::MyTv(QObject *parent) :
 
     m_trayMenu = new QMenu();
     m_marker = m_trayMenu->addAction("Refresh", this, SLOT(fetchFeeds()));
-    m_trayMenu->addAction("Settings...", m_dlg, SLOT(show()));
+    m_trayMenu->addAction("Settings...", this, SLOT(showSettings()));
     m_trayMenu->addAction("Quit", this, SIGNAL(quit()));
     connect(m_trayMenu, SIGNAL(triggered(QAction*)), this, SLOT(openTorrent(QAction*)));
 
@@ -53,6 +53,12 @@ MyTv::~MyTv()
 {
     delete m_trayMenu;
     delete m_dlg;
+}
+
+void MyTv::showSettings()
+{
+    m_dlg->show();
+    m_dlg->raise();
 }
 
 void MyTv::update()

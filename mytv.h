@@ -24,6 +24,7 @@ signals:
     void quit();
 
 public slots:
+    void showSettings();
     void fetchFeeds();
     void processFeeds(QUrl feedUrl, QList<Feed*> data);
     void sortFeeds(QList<Feed*> data);
